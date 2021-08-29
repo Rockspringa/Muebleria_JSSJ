@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Inicio de Sesion</title>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/animations.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Inicio de Sesion</h1>
+        </div>
+        <form id="login" method="POST">
+            <label for="user">Nombre de usuario:</label>
+            <input type="text" class="in" id="user" name="user" placeholder="admin" required />
+
+            <label for="pass">Contraseña:</label>
+            <input type="password" class="in" id="pass" name="pass" placeholder="••••••••••" required />
+
+            <div class="submit"><input type="submit" class="submit-btn" value="Iniciar Sesion" /></div>
+        </form>
+    </div>
+</body>
+
+</html>

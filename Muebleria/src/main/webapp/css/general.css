@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+}
+
+.menu {
+    display: grid;
+    grid: auto / auto auto auto auto;
+    gap: 5px;
+    text-align: center;
+
+    background-color: #142341;
+    font-size: x-large;
+    color: #142341;
+    margin: 0;
+}
+
+.menu-item {
+    display: inline;
+    width: auto;
+    background-color: lightskyblue;
+    padding: 10px 0;
+    margin: 0 1px;
+    border-bottom: solid 4px #142341;
+}
+
+.selected {
+    background-color: lightgreen;
+}
+
+.home {
+    font-size: xx-large;
+    font-weight: bold;
+    grid-column: span 4;
+    width: auto;
+    color: azure;
+    margin: 10px 0 20px;
+}
+
+header > a {
+    text-decoration: none;
+    color: #142341;
+}
+
+.instruc {
+    font-size: x-large;
+    text-align: center;
+    padding: 1px;
+    background-color: lemonchiffon;
+}
+
+.instruc > p {
+    margin: 10px auto;
+}

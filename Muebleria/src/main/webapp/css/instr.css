@@ -1,0 +1,55 @@
+#instruc {
+    margin: 15px auto;
+    width: fit-content;
+
+    display: grid;
+    grid: auto / auto auto auto auto auto;
+    list-style: none;
+    text-align: center;
+    gap: 1em;
+}
+
+#instruc > a, #instruc > div {
+    font-size: x-large;
+    width: 10em;
+    height: 8em;
+    margin: 15px 0;
+    border: solid 2px lightskyblue;
+    margin: 0;
+    border-radius: 1em;
+    background-color: lightcyan;
+}
+
+#instruc > div {
+    grid-column-start: 5;
+    grid-row: span 3;
+    height: 406px;
+    margin-top: 16px;
+}
+
+#instruc b, #instruc ul {
+    margin: 10px auto;
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    padding: 0;
+}
+
+img {
+    width: 216px;
+    height: 152px;
+    border-bottom: solid 2px lightskyblue;
+}
+
+.req {
+    width: 216px;
+    height: 152px;
+    margin: 0 auto;
+    padding: 0;
+    border-bottom: solid 2px lightskyblue;
+}
+
+.req > p {
+    margin: 0;
+    padding: 5px;
+}

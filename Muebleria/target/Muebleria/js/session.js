@@ -4,29 +4,13 @@ function isAlfanumeric(tag) {
 }
 
 $(document).ready(() => {
-    $(".in").blur(() => {
-        if (! isAlfanumeric(this))
-            $(this).css({ backgroundColor: 'lightcoral', borderBottomColor: 'red' });
-    });
-
-    $('.in').focus(() => {
-        $(this).css({ backgrounColor: 'lightblue', borderBottomColor: '#142341' });
-    });
-
     $("#login").submit(() => {
         if (isAlfanumeric("#user") && isAlfanumeric("#user"))
             $.ajax({
-                url: "jsp/open_conn.jsp",
+                url: "../user_area",
                 type: 'POST',
                 data: { user: $("#user").val(), pass: $("#pass").val() },
-                success: data => {
-                        if (data.length > 1) {
-                            if (data.includes("3"))
-                                window.location.href = "fabrica/construir.jsp";
-                        } else {
-                            alert("No existe el registro");
-                        }
-                    }
+                success: data => { data.includes('/') ? window.location.href = data : alert(data); }
                 });
         else alert("Por favor, ingrese solo caracteres alfanumericos");
         return false;

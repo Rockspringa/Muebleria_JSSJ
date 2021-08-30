@@ -1,1 +1,5 @@
-edu\persis\CallQuery.class
+edu\obj\Usuario.class
+edu\enums\Index.class
+edu\general\TagFactory.class
+edu\general\UserArea.class
+edu\persis\Connect.class

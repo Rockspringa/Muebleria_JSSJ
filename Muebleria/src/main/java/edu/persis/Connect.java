@@ -1,5 +1,6 @@
 package edu.persis;
 
+import edu.general.TagFactory;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
@@ -9,32 +10,17 @@ import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-public class CallQuery {
+public class Connect {
+    
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
     private static final String select = "SELECT * FROM ? WHERE ? ? ?";
     private static PreparedStatement stmt = null;
 
     private static Connection conn = null;
-    private static final String url = "jdbc:mysql://localhost:3306/Muebleria";
-    private static final String user = "root";
-    private static final String pass = "N47ur41B1u35#";
-
-    public static String isUsuario(String usuario, String contraseña) {
-        String query = "CALL IS_USUARIO (?, ?)";
-        ResultSet res = getResultSet(query, usuario, contraseña);
-        String response = "";
-
-        try {
-            while (res != null && res.next()) {
-                response += res.getString(1);
-            }
-        } catch (SQLException e) {
-            response = "Hubo un error al validar el usuario";
-        }
-
-        return response;
-    }
+    private static final String URL = "jdbc:mysql://localhost:3306/Muebleria";
+    private static final String USER = "root";
+    private static final String PASS = "N47ur41B1u35#";
 
     public static String selectEstudiante(String campo, String operador, String dato) {
         StringBuilder sb = new StringBuilder();
@@ -43,7 +29,7 @@ public class CallQuery {
 
         try {
             while (res != null && res.next()) {
-                sb.append(getRow(String.valueOf(res.getInt(1)),
+                sb.append(TagFactory.getRow(String.valueOf(res.getInt(1)),
                         res.getString(2), res.getString(3),
                         getDate(res.getDate(4))));
             }
@@ -61,7 +47,7 @@ public class CallQuery {
 
         try {
             while (res != null && res.next()) {
-                sb.append(getRow(getDate(res.getDate(1)),
+                sb.append(TagFactory.getRow(getDate(res.getDate(1)),
                         String.valueOf(res.getInt(2)),
                         String.valueOf(res.getInt(3)),
                         String.valueOf(res.getBoolean(4))));
@@ -73,41 +59,54 @@ public class CallQuery {
         return sb.toString();
     }
 
-    public static String closeSession() {
-        String res = "";
+    public static boolean closeSession() {
+        boolean success = false;
+        
         if (stmt != null) {
             try {
                 stmt.close();
+                stmt = null;
+                success = true;
             } catch (SQLException e) {
-                res += "Hubo un error al cerrar el statement.\n";
+                success = false;
             }
-        }
-        if (conn != null) {
+        } if (conn != null) {
             try {
                 conn.close();
+                conn = null;
+                success = true;
             } catch (SQLException ex) {
-                res += "Hubo un error al cerrar la conexion.\n";
+                success = false;
             }
         }
-        return res;
+        return success;
     }
 
-    public static String createSession() {
-        if (conn != null) return "Conexion ya existente";
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url, user, pass);
-            return "ready";
-        } catch (Exception e) {
-            return "Hubo un error al conectar" + e.getMessage();
+    public static boolean createSession() {
+        boolean success = true;
+        
+        if (conn == null) {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                conn = DriverManager.getConnection(URL, USER, PASS);
+            } catch (ClassNotFoundException | SQLException e) {
+                success = false;
+            }
         }
+        
+        return success;
     }
 
-    private static String getDate(Date fecha) {
+    public static PreparedStatement getPrepareStatement(String query) throws SQLException {
+        return Connect.conn.prepareStatement(query);
+    }
+
+    public static String getDate(Date fecha) {
         LocalDate date = fecha.toLocalDate();
         return date.format(formatter);
     }
 
+    @Deprecated
     private static ResultSet getResultSet(String query, String ...dato) {
         ResultSet res = null;
         
@@ -131,17 +130,5 @@ public class CallQuery {
         query = query.replaceFirst("\\?", operador);
 
         return query;
-    }
-
-    private static String getRow(String ...args) {
-        StringBuilder sb = new StringBuilder("<tr>");
-        for (int i = 0; i < args.length; i++) {
-            sb.append("<td>");
-            sb.append(args[i]);
-            sb.append("</td>");
-        }
-        sb.append("</tr>");
-
-        return sb.toString();
     }
 }

@@ -40,14 +40,3 @@ header > a {
     text-decoration: none;
     color: #142341;
 }
-
-.instruc {
-    font-size: x-large;
-    text-align: center;
-    padding: 1px;
-    background-color: lemonchiffon;
-}
-
-.instruc > p {
-    margin: 10px auto;
-}

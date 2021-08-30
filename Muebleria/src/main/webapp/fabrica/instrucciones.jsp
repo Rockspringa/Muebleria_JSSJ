@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <jsp:include page="/repeated/links.jsp" />
-    <title>Instrucciones de un Mueble</title>
-    <link rel="stylesheet" type="text/css" href="../css/instr.css"></link>
-</head>
+<%! String title = "Instruciones de un Mueble"; %>
+<%! String cssLink = "../css/instr.css"; %>
+<%@include file="repeated/topHtml.jsp" %>
 
 <body>
-    <jsp:include page="/repeated/header.jsp" />
-    <section class="instruc">
-        <p><b>Info: </b>Presione sobre el mueble que quiere construir,
-             se agregara automaticamente a la seccion de ventas.</p>
-    </section>
+    <%@include file="repeated/header.jsp" %>
+    <div class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Info: </strong>Presione sobre el mueble que quiere construir,
+            se agregara automaticamente a la seccion de ventas.
+    </div>
     <section id="instrucciones">
         
     </section>

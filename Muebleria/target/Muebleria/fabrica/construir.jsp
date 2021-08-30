@@ -13,10 +13,10 @@
     </section>
     <section id="muebles">
         <div><b>Piezas necesarias</b>
-            <ul>
+            <ul class="list-group list-group-flush">
             </ul>
+            <input id="create" type="button" class="btn btn-secondary" value="Crear mueble">
         </div>
-        <a><img src="/resources/images/mueble.png" alt="mueble"><br />mueble 1</a>
     </section>
 </body>
 

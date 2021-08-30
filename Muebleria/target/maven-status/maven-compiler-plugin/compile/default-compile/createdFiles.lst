@@ -1,5 +1,6 @@
 edu\obj\Usuario.class
+edu\general\UserArea.class
+edu\queries\Muebles.class
+edu\conn\Connect.class
 edu\enums\Index.class
 edu\general\TagFactory.class
-edu\general\UserArea.class
-edu\persis\Connect.class

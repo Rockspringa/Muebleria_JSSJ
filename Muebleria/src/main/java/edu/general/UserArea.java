@@ -1,8 +1,9 @@
 package edu.general;
 
+import edu.conn.Connect;
 import edu.enums.Index;
 import edu.obj.Usuario;
-import edu.persis.Connect;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.PreparedStatement;

@@ -48,7 +48,7 @@ BEGIN
 	IF (EXISTS(SELECT usuario, contraseña FROM USUARIO WHERE nombre_usuario = usuario AND contraseña = contra))
 	THEN
 		SELECT tipo INTO @t FROM USUARIO WHERE nombre_usuario = usuario;
-		SELECT CONCAT("1  ", @t);
+		SELECT CONCAT("  ", @t);
 	ELSE
 		SELECT "0";
 	END IF;

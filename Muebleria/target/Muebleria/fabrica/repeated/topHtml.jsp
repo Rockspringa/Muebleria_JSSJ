@@ -8,9 +8,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <script src="../js/jquery-3.6.0.min.js"></script>
-    <script src="../js/animations.js"></script>
+    <script src="../js/general.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <%= (title.contains("Construir")) ? "<script src=\"../js/construir.js\"></script>" : "" %>
+    <script src="<%= jsLink %>"></script>
     <link rel="stylesheet" type="text/css" href="<%= cssLink %>">
     <link rel="stylesheet" type="text/css" href="../css/general.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

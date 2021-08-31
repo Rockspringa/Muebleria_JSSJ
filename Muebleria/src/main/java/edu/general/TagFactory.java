@@ -3,12 +3,13 @@ package edu.general;
 public class TagFactory {
     
     public static String getRow(String ...data) {
-        return getRow(false, data);
+        return getRow(2, data);
     }
     
-    public static String getRow(boolean warning, String ...data) {
-        StringBuilder sb = new StringBuilder(
-                "<tr" + (warning ? " class=\"table-warning" : "") + "\">"
+    public static String getRow(int flag, String ...data) {
+        StringBuilder sb = new StringBuilder("<tr class=\"table-"
+                + (switch (flag) { case 0  -> "danger"; case 1  -> "warning"; default -> "success"; })
+                + "\">"
         );
         
         for (String data1 : data) {
@@ -21,21 +22,19 @@ public class TagFactory {
         return sb.toString();
     }
     
-    public static String getTable(String[] titles, String ...rows) {
-        StringBuilder sb = new StringBuilder("<table><thead><tr>");
+    public static String getTable(String[] titles, String rows) {
+        StringBuilder sb = new StringBuilder("<table class=\"table\"><thead class=\"thead-light\"><tr>");
 
-        for (String row : rows) {
+        for (String th : titles) {
             sb.append("<th>");
-            sb.append(row);
+            sb.append(th);
             sb.append("</th>");
         }
 
         sb.append("</tr></thead>");
         sb.append("<tbody>");
 
-        for (String row : rows) {
-            sb.append(row);
-        }
+        sb.append(rows);
 
         sb.append("</tbody>");
         sb.append("</table>");
@@ -58,15 +57,25 @@ public class TagFactory {
         return sb.toString();
     }
 
-    public static String getListNum(String item, String badge, boolean notDanger) {
-        StringBuilder sb = new StringBuilder("<li class=\"list-group-item d-flex "
-                + "justify-content-between align-items-center "
-                + (notDanger ? "list-group-item-success" : "list-group-item-danger") + "\">");
+    public static String getListNum(String item, String badge, int cant) {
+        String color = switch (cant) { case 0  -> "danger"; case 1  -> "warning"; default -> "success"; };
+        StringBuilder sb = new StringBuilder("<li class=\"list-group-item d-flex justify-content"
+                + "-between align-items-center list-group-item-" + color + "\">");
         
         sb.append(item);
-        sb.append("<span class=\"badge badge-" + (notDanger ? "success" : "danger") + " badge-pill\">");
+        sb.append("<span class=\"badge badge-" + color + " badge-pill\">");
         sb.append(badge);
         sb.append("</span></li>");
+
+        return sb.toString();
+    }
+
+    public static String getListMuebles(String mueble) {
+        StringBuilder sb = new StringBuilder("<li class=\"list-group-item d-flex justify-content"
+                + "-between align-items-center list-group-item-info\">");
+        
+        sb.append(mueble);
+        sb.append("</li>");
 
         return sb.toString();
     }

@@ -13,7 +13,6 @@
 #muebles > .b-box, #muebles > div {
     margin: 15px 0;
     border: solid 2px lightskyblue;
-    margin: 0;
     font-size: x-large;
     border-radius: 1em;
     background-color: lightcyan;
@@ -46,9 +45,10 @@
 }
 
 #create {
-   position: absolute;
-   bottom: 10px;
-   left: 35%;
+    
+    position: absolute;
+    bottom: 10px;
+    left: 35%;
 }
 
 #muebles b {
@@ -70,17 +70,4 @@ img {
     width: 216px;
     height: 152px;
     border-bottom: solid 2px lightskyblue;
-}
-
-.req {
-    width: 216px;
-    height: 152px;
-    margin: 0 auto;
-    padding: 0;
-    border-bottom: solid 2px lightskyblue;
-}
-
-.req > p {
-    margin: 0;
-    padding: 5px;
 }

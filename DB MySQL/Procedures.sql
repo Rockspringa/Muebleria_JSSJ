@@ -38,16 +38,16 @@ DELIMITER //
 
 CREATE PROCEDURE ENSAMBLAR_NOW (IN mueble VARCHAR(40), IN usuario VARCHAR(40))
 BEGIN
-	SELECT ENSAMBLAR(mueble, usuario, CURDATE());
+	CALL ENSAMBLAR(mueble, usuario, CURDATE());
 END;
 
 DELIMITER //
 
 CREATE PROCEDURE IS_USUARIO (IN usuario VARCHAR(40), IN contra VARCHAR(40))
 BEGIN
-	IF (EXISTS(SELECT usuario, contraseña FROM USUARIO WHERE nombre_usuario = usuario AND contraseña = contra))
+	IF (EXISTS(SELECT usuario, contraseña FROM USUARIO WHERE nombre_usuario LIKE usuario AND contraseña LIKE BINARY contra))
 	THEN
-		SELECT tipo INTO @t FROM USUARIO WHERE nombre_usuario = usuario;
+		SELECT tipo INTO @t FROM USUARIO WHERE nombre_usuario LIKE BINARY usuario;
 		SELECT CONCAT("  ", @t);
 	ELSE
 		SELECT "0";
@@ -120,9 +120,37 @@ CREATE PROCEDURE GET_PIEZAS_IND (IN n_mueble VARCHAR(40))
 BEGIN
     IF (EXISTS(SELECT nombre FROM MUEBLE WHERE nombre = n_mueble))
     THEN
-		SELECT CONCAT(tipo_pieza, ' de Q', costo_pieza), CONCAT(mp.cantidad, '/', i.cantidad), IF(mp.cantidad < i.cantidad, ' ', 'r')
-			FROM INDICACIONES INNER JOIN MATERIA_PRIMA ON tipo_pieza = pieza AND costo = costo_pieza
+		SELECT CONCAT(tipo_pieza, ' de Q', costo_pieza),
+				CONCAT(IF(mp.cantidad < i.cantidad, mp.cantidad, i.cantidad), '/', i.cantidad),
+                IF(mp.cantidad < i.cantidad, 0, 1)
+			FROM INDICACIONES i INNER JOIN MATERIA_PRIMA mp ON tipo_pieza = tipo AND costo = costo_pieza
 			WHERE mueble = n_mueble;
+	ELSE SELECT "falta el mueble";
+	END IF;
+END;
+
+DELIMITER //
+
+CREATE PROCEDURE GET_PIEZAS_IND_TABLA (IN n_mueble VARCHAR(40))
+BEGIN
+    IF (EXISTS(SELECT nombre FROM MUEBLE WHERE nombre = n_mueble))
+    THEN
+		SELECT IF(mp.cantidad < i.cantidad, 0, IF(mp.cantidad < 10, 1, 2)), tipo_pieza, CONCAT("Q.", costo_pieza), CONCAT(i.cantidad, " unidades")
+			FROM INDICACIONES i INNER JOIN MATERIA_PRIMA mp ON tipo_pieza = tipo AND costo = costo_pieza
+			WHERE mueble = n_mueble;
+	ELSE SELECT "falta el mueble";
+	END IF;
+END;
+
+DELIMITER //
+
+CREATE PROCEDURE GET_PRECIOS_MUEBLE (IN n_mueble VARCHAR(40))
+BEGIN
+    IF (EXISTS(SELECT nombre FROM MUEBLE WHERE nombre = n_mueble))
+    THEN
+		SELECT CONCAT("precio: Q", SUM(costo_pieza * cantidad)), CONCAT("costo: Q", precio) FROM MUEBLE
+			INNER JOIN INDICACIONES ON mueble = nombre
+				WHERE mueble = n_mueble GROUP BY nombre;
 	ELSE SELECT "falta el mueble";
 	END IF;
 END;
@@ -134,7 +162,6 @@ BEGIN
 	SET @num = 0;
 	SELECT @num := @num + 1 AS ' ', tipo, costo, cantidad FROM MATERIA_PRIMA ORDER BY costo;
 END;
-
 
 DELIMITER //
 
@@ -154,3 +181,40 @@ BEGIN
 		WHERE cantidad < 10 ORDER BY cantidad;
 END;
 
+DELIMITER //
+
+CREATE PROCEDURE GET_MUEBLES ()
+BEGIN
+	SELECT nombre, IF(i.cantidad > mp.cantidad, "btn-danger", "b-box") FROM MUEBLE
+		INNER JOIN INDICACIONES i ON nombre = mueble
+		INNER JOIN MATERIA_PRIMA mp ON tipo_pieza = tipo AND costo_pieza = costo
+			ORDER BY CAST(mp.cantidad AS SIGNED) - CAST(i.cantidad AS SIGNED) DESC;
+END;
+
+DELIMITER //
+
+CREATE PROCEDURE ADD_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN cantidad_p INT)
+BEGIN
+	IF (EXISTS(SELECT tipo FROM MATERIA_PRIMA WHERE tipo = pieza))
+    THEN
+		UPDATE MATERIA_PRIMA SET cantidad = cantidad + cantidad_p WHERE tipo = pieza;
+	ELSE
+		INSERT INTO MATERIA_PRIMA VALUES (pieza, costo_p, cantidad_p);
+	END IF;
+END;
+
+DELIMITER //
+
+CREATE PROCEDURE ADD_PIEZA_UNO (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2))
+BEGIN
+	CALL ADD_PIEZA (pieza, costo_p, 1);
+END;
+
+-- INSERT INTO MUEBLE VALUES ("Mesa Rustica", 150.00)
+-- ICALL ADD_PIEZA ("Pata Cuadrada", 15.50, 4);
+-- ICALL ADD_PIEZA ("Pata Cuadrada", 15.50, -1);
+-- ICALL ADD_INDICACION ("Mesa Rustica", "Pata Cuadrada", 2)
+-- ICALL GET_MUEBLES ()
+-- ISELECT * FROM MUEBLE;
+-- ISELECT * FROM MATERIA_PRIMA;
+-- ISELECT * FROM INDICACIONES;

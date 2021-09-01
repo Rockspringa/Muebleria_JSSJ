@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <%! String title = "Construir Mueble"; %>
-<%! String cssLink = "../css/construir.css"; %>
-<%! String jsLink = "../js/construir.js"; %>
+<%! String cssLink = "../css/fabrica/construir.css"; %>
+<%! String jsLink = "../js/fabrica/construir.js"; %>
 <!-- Se incluye el header con el titulo y links -->
 <%@include file="repeated/topHtml.jsp" %>
 
-<body>
-  <!-- Se incluye el header, donde reenviara a las diferentes secciones de la area -->
-  <%@include file="repeated/header.jsp" %>
   <div class="alert alert-warning alert-dismissible">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Info: </strong>Presione sobre el mueble que quiere construir,

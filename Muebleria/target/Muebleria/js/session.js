@@ -15,25 +15,4 @@ $(document).ready(() => {
         else alert("Por favor, ingrese solo caracteres alfanumericos");
         return false;
     });
-    /*$.ajax({
-        url: "jsp/open_conn.jsp",
-        success: data => {
-            if (data.includes("ready") || data.includes("existente")) {
-                ajaxCall("jsp/select_asi.jsp", '#asignacion', { carnet: 0 },
-                    ajaxCall("jsp/select_cur.jsp", '#curso', { codigo: 0 },
-                        ajaxCall("jsp/select_est.jsp", '#estudiante', { carnet: 0 },
-                            () => {
-                                $.ajax({
-                                    url: "jsp/close_conn.jsp",
-                                    type: 'post',
-                                    async: false,
-                                    timeout: 5000
-                                })
-                            }
-                        )
-                    )
-                );
-            } else alert(data);
-        }
-    })*/
 });

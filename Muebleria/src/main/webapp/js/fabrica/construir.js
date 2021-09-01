@@ -1,7 +1,7 @@
 var muebleActual = null;
 function llamarMuebles() {
     $.ajax({
-        url: "/fabrica/muebles",
+        url: "/fabrica/queryDB",
         type: 'POST',
         data: { opcion: 'muebles' },
         success: data => { data.includes('button') ? $('#muebles').append(data) : alert(data); }
@@ -18,7 +18,7 @@ $(document).ready(() => {
         $('#create').prop('disabled', true);
         muebleActual = $(this).text();
         $.ajax({
-            url: "/fabrica/muebles",
+            url: "/fabrica/queryDB",
             type: 'POST',
             data: { opcion: 'piezas', mueble: muebleActual },
             success: data => {
@@ -32,7 +32,7 @@ $(document).ready(() => {
     
     $('#create').click(() => {
         $.ajax({
-            url: "/fabrica/muebles",
+            url: "/fabrica/queryDB",
             type: 'POST',
             data: { opcion: 'ensamblar', mueble: muebleActual },
             success: data => {

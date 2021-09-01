@@ -15,8 +15,8 @@ import edu.obj.Usuario;
 import edu.conn.Connect;
 import edu.general.TagFactory;
 
-@WebServlet(name = "Muebles", urlPatterns = {"/fabrica/muebles"})
-public class Muebles extends Connect {
+@WebServlet(name = "Muebles", urlPatterns = {"/fabrica/queryDB"})
+public class Fabrica extends Connect {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -33,6 +33,8 @@ public class Muebles extends Connect {
             case "mueblesLi" -> getListaMuebles();
             case "indicacio" -> getIndicaciones(request.getParameter("mueble"));
             case "precios"   -> getPrecios(request.getParameter("mueble"));
+            case "piezasTab" -> getTablaPiezas();
+            case "creadoTab" -> getCreados();
             default -> "No se ejecuto ninguna opcion.";
         };
 
@@ -151,6 +153,49 @@ public class Muebles extends Connect {
 
         } catch (SQLException e) {
             return "No se pudieron recuperar el precio y coste del mueble";
+        }
+    }
+
+    private static String getTablaPiezas() {
+        String query = "CALL GET_PIEZAS ()";
+        try {
+            StringBuilder sb = new StringBuilder();
+            PreparedStatement ps = getPrepareStatement(query);
+            String[] titles = {"  ", "Tipo de la Pieza", "Costo de la Pieza",
+                        "Cantidad en Existencias", "Estado"};
+            
+            ResultSet res = ps.executeQuery();
+
+            while (res.next())
+                sb.append(TagFactory.getRow(res.getInt(1), String.valueOf(res.getInt(2)),
+                            res.getString(3), String.valueOf(res.getDouble(4)), res.getString(5),
+                            res.getString(6)));
+
+            return TagFactory.getTable(titles, sb.toString());
+        } catch (SQLException e) {
+            return "No se pudieron recuperar la tabla de piezas";
+        }
+    }
+
+    private static String getCreados() {
+        String query = "CALL GET_CREADOS ()";
+        try {
+            StringBuilder sb = new StringBuilder();
+            PreparedStatement ps = getPrepareStatement(query);
+            String[] titles = {"  ", "Tipo de Mueble", "Ensamblador", "Fecha de Ensamble",
+                        "Costo Total", "Precio"};
+            
+            ResultSet res = ps.executeQuery();
+
+            while (res.next())
+                sb.append(TagFactory.getRow(2, res.getString(1), res.getString(2),
+                            res.getString(3), getDate(res.getDate(4)),
+                            String.valueOf(res.getDouble(5)),
+                            String.valueOf(res.getString(6))));
+
+            return TagFactory.getTable(titles, sb.toString());
+        } catch (SQLException e) {
+            return "No se pudieron recuperar la tabla de muebles";
         }
     }
 }

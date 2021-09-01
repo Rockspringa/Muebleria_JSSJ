@@ -17,7 +17,7 @@
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(12, 1fr);
     grid-column-end: span 3;
-    height: 505px;
+    height: 34em;
     background-color: #b8daff;
     border-radius: 25px;
     color: #004085;

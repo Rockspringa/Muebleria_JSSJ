@@ -1,0 +1,29 @@
+#btns {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+
+    margin: 1em auto;
+}
+
+#piezas-btn {
+    grid-column-start: 2;
+}
+
+#creado-btn {
+    grid-column-start: 4;
+}
+
+#box {
+    width: 90%;
+    height: 32em;
+    margin: auto;
+
+    background-color: #b8daff;
+    overflow-y: auto;
+    color: #004085;
+}
+
+.btn {
+    width: fit-content;
+    margin: auto;
+}

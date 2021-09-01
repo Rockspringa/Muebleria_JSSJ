@@ -122,7 +122,7 @@ BEGIN
     THEN
 		SELECT CONCAT(tipo_pieza, ' de Q', costo_pieza),
 				CONCAT(IF(mp.cantidad < i.cantidad, mp.cantidad, i.cantidad), '/', i.cantidad),
-                IF(mp.cantidad < i.cantidad, 0, 1)
+                IF(mp.cantidad < i.cantidad, 0, IF(mp.cantidad < 10, 1, 2))
 			FROM INDICACIONES i INNER JOIN MATERIA_PRIMA mp ON tipo_pieza = tipo AND costo = costo_pieza
 			WHERE mueble = n_mueble;
 	ELSE SELECT "falta el mueble";
@@ -148,7 +148,7 @@ CREATE PROCEDURE GET_PRECIOS_MUEBLE (IN n_mueble VARCHAR(40))
 BEGIN
     IF (EXISTS(SELECT nombre FROM MUEBLE WHERE nombre = n_mueble))
     THEN
-		SELECT CONCAT("precio: Q", SUM(costo_pieza * cantidad)), CONCAT("costo: Q", precio) FROM MUEBLE
+		SELECT CONCAT("costo: Q", SUM(costo_pieza * cantidad)), CONCAT("precio: Q", precio) FROM MUEBLE
 			INNER JOIN INDICACIONES ON mueble = nombre
 				WHERE mueble = n_mueble GROUP BY nombre;
 	ELSE SELECT "falta el mueble";
@@ -160,7 +160,9 @@ DELIMITER //
 CREATE PROCEDURE GET_PIEZAS ()
 BEGIN
 	SET @num = 0;
-	SELECT @num := @num + 1 AS ' ', tipo, costo, cantidad FROM MATERIA_PRIMA ORDER BY costo;
+	SELECT IF(cantidad < 4, 0, IF(cantidad < 13, 1, 2)), @num := @num + 1 AS ' ',
+			tipo, costo, cantidad, IF(cantidad = 0, "Agotado", IF(cantidad < 13, "Agotandose", "Suficiente"))
+		FROM MATERIA_PRIMA ORDER BY costo;
 END;
 
 DELIMITER //

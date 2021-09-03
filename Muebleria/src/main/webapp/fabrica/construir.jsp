@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<%! String title = "Construir Mueble"; %>
+<%! int index = 0; %>
 <%! String cssLink = "../css/fabrica/construir.css"; %>
 <%! String jsLink = "../js/fabrica/construir.js"; %>
 <!-- Se incluye el header con el titulo y links -->
-<%@include file="repeated/topHtml.jsp" %>
+<%@include file="vars.jsp" %>
+<%@include file="/top.jsp" %>
 
   <div class="alert alert-warning alert-dismissible">
     <button type="button" class="close" data-dismiss="alert">&times;</button>

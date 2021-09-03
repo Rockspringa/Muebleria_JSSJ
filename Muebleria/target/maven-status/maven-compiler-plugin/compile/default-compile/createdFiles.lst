@@ -4,6 +4,7 @@ edu\errores\NegativeNumberException.class
 edu\general\UserArea.class
 edu\conn\Connect.class
 edu\enums\Index.class
+edu\general\BotonHeader.class
 edu\queries\Fabrica.class
 edu\errores\NonAlfanumericStringException.class
 edu\general\TagFactory.class

@@ -88,17 +88,17 @@ public class UserArea extends HttpServlet {
             } else {
                 switch (usuario.getNivel()) {
                     case 1:
-                        if (!areaRequesting.contains("fabrica"))
+                        if (!areaRequesting.contains("Fabrica"))
                             response.sendRedirect(Index.FABRICA.getUrl());
                         break;
 
                     case 2:
-                        if (!areaRequesting.contains("ventas"))
+                        if (!areaRequesting.contains("Ventas"))
                             response.sendRedirect(Index.VENTAS.getUrl());
                         break;
 
                     case 3:
-                        if (!areaRequesting.contains("admin"))
+                        if (!areaRequesting.contains("Admin"))
                             response.sendRedirect(Index.ADMIN.getUrl());
                         break;
 

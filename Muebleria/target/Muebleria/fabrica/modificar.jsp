@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<%! String title = "Modificacion en Proceso"; %>
+<%! int index = 3; %>
 <%! String cssLink = "../css/fabrica/cuad.css"; %>
 <%! String jsLink = "../js/fabrica/cuad.js"; %>
 <!-- Se incluye el header con el titulo y links -->
-<%@include file="repeated/topHtml.jsp" %>
+<%@include file="vars.jsp" %>
+<%@include file="/top.jsp" %>
 
     <section id="btns">
         <button type="button" class="cre press btn btn-secondary">Crear un Nuevo Tipo de Pieza</button>

@@ -254,9 +254,28 @@ END;
 
 DELIMITER //
 
+CREATE PROCEDURE DEL_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2))
+BEGIN
+	IF (EXISTS(SELECT tipo, costo FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p))
+	THEN
+		DELETE FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p;
+        
+		SELECT CONCAT('Completado, se elimino con exito el tipo "', pieza, '" con coste de Q.', costo_p);
+	ELSE
+		SELECT 'No existe ninguna coincidencia con la pieza y el costo.';
+	END IF;
+END;
+
+DELIMITER //
+
 CREATE PROCEDURE ADD_PIEZA_UNO (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2))
 BEGIN
-	CALL ADD_PIEZA (pieza, costo_p, 1);
+	IF (EXISTS(SELECT tipo, costo FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p))
+    THEN
+		CALL ADD_PIEZA (pieza, costo_p, 1);
+	ELSE
+		CALL CREAR_PIEZA (pieza, costo_p, 1);
+	END IF;
 END;
 
 -- INSERT INTO MUEBLE VALUES ("Mesa Rustica", 150.00)

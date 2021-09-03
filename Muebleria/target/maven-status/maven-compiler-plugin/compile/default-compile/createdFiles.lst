@@ -1,6 +1,9 @@
+edu\general\Corroborador.class
 edu\obj\Usuario.class
+edu\errores\NegativeNumberException.class
 edu\general\UserArea.class
 edu\conn\Connect.class
 edu\enums\Index.class
 edu\queries\Fabrica.class
+edu\errores\NonAlfanumericStringException.class
 edu\general\TagFactory.class

@@ -22,5 +22,5 @@
         <a href="construir.jsp" class="menu-item <%= (title.contains("Construir")) ? "selected" : "" %>" id="con-mue">Construir un Mueble</a>
         <a href="instrucciones.jsp" class="menu-item <%= (title.contains("Instruc")) ? "selected" : "" %>" id="lib-ind">Indicaciones</a>
         <a href="inventario.jsp" class="menu-item <%= (title.contains("Invent")) ? "selected" : "" %>" id="inv-pie">Inventarios</a>
-        <a href="crud.jsp" class="menu-item <%= (title.contains("Creados")) ? "selected" : "" %>" id="mue-cre">Modificar Inventario</a>
+        <a href="modificar.jsp" class="menu-item <%= (title.contains("Modif")) ? "selected" : "" %>" id="mue-cre">Modificar Inventario</a>
     </header>

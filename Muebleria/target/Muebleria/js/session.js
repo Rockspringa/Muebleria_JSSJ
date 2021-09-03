@@ -1,7 +1,3 @@
-const REGEX = new RegExp("^[\\w\\d]+$");
-function isAlfanumeric(tag) {
-    return REGEX.test($(tag).val());
-}
 
 $(document).ready(() => {
     $("#login").submit(() => {

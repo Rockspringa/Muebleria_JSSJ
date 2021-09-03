@@ -8,6 +8,10 @@ body {
     gap: 5px;
     text-align: center;
 
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
     background-color: #142341;
     font-size: x-large;
     color: #142341;
@@ -37,4 +41,14 @@ body {
 header a, header a:hover {
     text-decoration: none;
     color: #142341;
+}
+
+#box {
+    width: 90%;
+    height: 32em;
+    margin: auto;
+
+    background-color: #b8daff;
+    overflow-y: auto;
+    color: #004085;
 }

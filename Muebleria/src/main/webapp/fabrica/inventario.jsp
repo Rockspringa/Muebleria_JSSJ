@@ -12,8 +12,8 @@
     </div>
 
     <section id="btns">
-        <button id="piezas-btn" type="button" class="btn btn-secondary">Inventario de Piezas</button>
-        <button id="creado-btn" type="button" class="btn btn-secondary">Inventario de Mesas Ensambladas</button>
+        <button id="piezas-btn" type="button" class="press btn btn-secondary">Inventario de Piezas</button>
+        <button id="creado-btn" type="button" class="press btn btn-secondary">Inventario de Mesas Ensambladas</button>
     </section>
 
     <section id="box">

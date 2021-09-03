@@ -1,0 +1,36 @@
+<h1 class="bg-primary text-white">Eliminar un tipo existente de pieza</h1>
+<div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Info: </strong>Seleccione el tipo de pieza para poder elegir el costo. 
+</div>
+<form method="POST" class="del">
+    <div class="form-group">
+        <label for="tipo">Tipo de la Pieza</label>
+        <select class="form-control" id="tipo" name="tipo" aria-describedby="thelp" required>
+            <option disabled selected>Tipo de la pieza</option>
+        </select>
+        <small id="thelp" class="form-text text-muted">Nombre de la pieza.</small>
+    </div>
+    <div class="form-group">
+        <label for="costo">Costo de la Pieza</label>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Q.</div>
+            </div>
+            <select class="form-control" id="costo" name="costo"  required>
+                <option disabled selected>Costo de la pieza</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="tipo">Cantidad Actual de Piezas</label>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control form-control-plaintext" id="cantidad" name="cantidad"
+                value="Esperando datos..." readonly>
+            <div class="input-group-prepend">
+                <div class="input-group-text">Unidades</div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Eliminar Pieza</button>
+</form>

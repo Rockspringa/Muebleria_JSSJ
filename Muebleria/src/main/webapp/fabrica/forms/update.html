@@ -1,0 +1,69 @@
+<h1 class="bg-primary text-white">Modificar un tipo existente de pieza</h1>
+<div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Info: </strong>Seleccione el tipo de pieza para poder elegir el costo.
+</div>
+<div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Info: </strong>Si no desea cambiar algun dato deje vacio el campo o copielos exactamente igual.
+</div>
+<form method="POST" class="upd">
+    <div class="form-group">
+        <label for="tipo">Tipo de la Pieza</label>
+        <select class="form-control" id="tipo" name="tipo" aria-describedby="thelp" required>
+            <option disabled selected>Tipo de la pieza</option>
+        </select>
+        <small id="thelp" class="form-text text-muted">Nombre de la pieza.</small>
+    </div>
+    <div class="form-group">
+        <label for="costo">Costo de la Pieza</label>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Q.</div>
+            </div>
+            <select class="form-control" id="costo" name="costo"  required>
+                <option disabled selected>Costo de la pieza</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="tipo">Cantidad Actual de Piezas</label>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control form-control-plaintext" id="cantidad" name="cantidad"
+                value="Esperando datos..." readonly>
+            <div class="input-group-prepend">
+                <div class="input-group-text">Unidades</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group invisible"></div>
+
+    <hr>
+    <div class="form-group">
+        <label for="tipo">Tipo de la Pieza</label>
+        <input type="text" class="in form-control limit-40" id="tipo-n" name="tipo-n" aria-describedby="thelp-n"
+            placeholder="Ingrese el tipo de la pieza">
+        <small id="thelp-n" class="form-text text-muted">Nombre de la pieza.</small>
+    </div>
+    <div class="form-group">
+        <label for="costo">Costo de la Pieza</label>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Q.</div>
+            </div>
+            <input type="text" class="form-control limit-num" id="costo-n" name="costo-n"
+                placeholder="Ingrese el costo de la pieza, solo numeros">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="tipo">Cantidad Entrante de Piezas</label>
+        <div class="input-group mb-2">
+            <input type="text" class="form-control limit-num" id="cantidad-n" name="cantidad-n"
+                placeholder="Ingrese la cantidad de nuevas existencias, solo numeros">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Unidades</div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Modificar Pieza</button>
+</form>

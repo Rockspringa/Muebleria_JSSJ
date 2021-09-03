@@ -1,0 +1,50 @@
+#btns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    margin: 1em 0;
+    width: 100%;
+}
+
+#box {
+    min-width: 90%;
+    min-height: 32em;
+    height: fit-content !important;
+    margin-bottom: 3em !important;
+}
+
+form {
+    margin: 1.5em 2.5em;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em 3.5em;
+}
+
+.form-group {
+    margin: 0;
+}
+
+.form-control-plaintext {
+    padding: .375rem .75rem !important;
+}
+
+h1 {
+    margin: 0;
+    padding: 0.5em 1.5em;
+}
+
+form > hr {
+    grid-column-end: span 2;
+    margin: 0;
+}
+
+section > .btn {
+    width: 13.5em;
+    margin: 0 auto;
+}
+
+form > .btn {
+    grid-column-end: span 2;
+    width: 13.5em;
+    margin: 0 auto;
+}

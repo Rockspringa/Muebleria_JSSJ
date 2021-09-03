@@ -199,9 +199,56 @@ CREATE PROCEDURE ADD_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN c
 BEGIN
 	IF (EXISTS(SELECT tipo FROM MATERIA_PRIMA WHERE tipo = pieza))
     THEN
-		UPDATE MATERIA_PRIMA SET cantidad = cantidad + cantidad_p WHERE tipo = pieza;
+		IF (EXISTS(SELECT tipo, costo FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p))
+		THEN
+			UPDATE MATERIA_PRIMA SET cantidad = cantidad + cantidad_p WHERE tipo = pieza AND costo = costo_p;
+            SELECT CONCAT('Completado, ahora hay ', cantidad, ' unidades de ', tipo) FROM MATERIA_PRIMA
+				WHERE tipo = pieza AND costo = costo_p;
+		ELSE 
+            SELECT 'No se encontro un costo coincidente.';
+		END IF;
+	ELSE
+		SELECT 'No se encontro un tipo coincidente.';
+	END IF;
+END;
+
+DELIMITER //
+
+CREATE PROCEDURE CREAR_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN cantidad_p INT)
+BEGIN
+	IF (EXISTS(SELECT tipo, costo FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p))
+	THEN
+		SELECT 'El tipo de pieza, con el mismo coste ya existe, el formulario de añadir o el de modificar le pueden ayudar.';
 	ELSE
 		INSERT INTO MATERIA_PRIMA VALUES (pieza, costo_p, cantidad_p);
+		SELECT CONCAT('Completado, creado el tipo "', tipo, '" con coste de Q.', costo, ' y con existencias igual a ', cantidad)
+			FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p;
+	END IF;
+END;
+
+DELIMITER //
+
+CREATE PROCEDURE UPDATE_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN pieza_n VARCHAR(40), IN costo_n DECIMAL(5, 2), IN cantidad_n INT)
+BEGIN
+	IF (pieza = pieza_n AND costo_p = costo_n)
+	THEN
+		SELECT cantidad INTO @cant FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p;
+		UPDATE MATERIA_PRIMA SET cantidad = cantidad_n WHERE tipo = pieza_n AND costo = costo_n;
+        
+		SELECT CONCAT('Completado, se actualizo el tipo "', tipo, '" con coste de Q.', costo, ' y con existencias igual a ', @cant,
+				', ahora tiene ', cantidad, ' unidades.') FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p;
+                
+	ELSEIF (EXISTS(SELECT tipo, costo FROM MATERIA_PRIMA WHERE tipo = pieza_n AND costo = costo_n))
+    THEN
+		SELECT 'El tipo y el coste nuevos ya existen, no se puede modificar la pieza solicitada.';
+        
+	ELSE
+		SELECT cantidad INTO @cant FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p;
+		UPDATE MATERIA_PRIMA SET tipo = pieza_n, costo = costo_n, cantidad = cantidad_n WHERE tipo = pieza AND costo = costo_p;
+        
+		SELECT CONCAT('Completado, se actualizo el tipo "', pieza, '" con coste de Q.', costo_p,
+			' y con existencias igual a ', @cant, ', ahora es el tipo "', pieza_n, '" con coste de Q.',
+			costo_n, ' y con existencias igual a ', cantidad_n);
 	END IF;
 END;
 

@@ -1,8 +1,5 @@
 $(document).ready(function() {
     $('#piezas-btn').click(function() {
-        $('#creado-btn').removeClass('btn-primary').addClass('btn-secondary');
-        $(this).removeClass('btn-secondary').addClass('btn-primary');
-
         $.ajax({
             url: "/fabrica/queryDB",
             type: 'POST',
@@ -12,9 +9,6 @@ $(document).ready(function() {
     });
     
     $('#creado-btn').click(function() {
-        $('#piezas-btn').removeClass('btn-primary').addClass('btn-secondary');
-        $(this).removeClass('btn-secondary').addClass('btn-primary');
-
         $.ajax({
             url: "/fabrica/queryDB",
             type: 'POST',

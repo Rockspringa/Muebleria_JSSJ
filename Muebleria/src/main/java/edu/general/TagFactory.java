@@ -79,4 +79,8 @@ public class TagFactory {
 
         return sb.toString();
     }
+
+    public static String getOptions(String opt) {
+        return "<option class=\"del\">" + opt + "</option>";
+    }
 }

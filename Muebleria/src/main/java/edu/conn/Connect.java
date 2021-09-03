@@ -1,21 +1,16 @@
 package edu.conn;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import javax.servlet.http.HttpServlet;
 
-import java.sql.Date;
+import edu.general.TagFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
 public class Connect extends HttpServlet {
-    
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    
-    private static PreparedStatement stmt = null;
 
     private static Connection conn = null;
     private static final String URL = "jdbc:mysql://localhost:3306/Muebleria";
@@ -25,15 +20,7 @@ public class Connect extends HttpServlet {
     public static boolean closeSession() {
         boolean success = false;
         
-        if (stmt != null) {
-            try {
-                stmt.close();
-                stmt = null;
-                success = true;
-            } catch (SQLException e) {
-                success = false;
-            }
-        } if (conn != null) {
+        if (conn != null) {
             try {
                 conn.close();
                 conn = null;
@@ -64,8 +51,19 @@ public class Connect extends HttpServlet {
         return Connect.conn.prepareStatement(query);
     }
 
-    public static String getDate(Date fecha) {
-        LocalDate date = fecha.toLocalDate();
-        return date.format(formatter);
+    protected static String getOpciones(String query) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            PreparedStatement ps = getPrepareStatement(query);
+            
+            ResultSet res = ps.executeQuery();
+
+            while (res.next())
+                sb.append(TagFactory.getOptions(res.getString(1)));
+
+            return sb.toString();
+        } catch (SQLException e) {
+            return "Hubo un error con las opciones, intentelo mas tarde.";
+        }
     }
 }

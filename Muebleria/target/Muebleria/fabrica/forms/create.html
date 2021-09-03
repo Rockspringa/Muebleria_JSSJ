@@ -1,0 +1,30 @@
+<h1 class="bg-primary text-white">Crear un nuevo tipo de pieza</h1>
+<form method="POST" class="cre">
+    <div class="form-group">
+        <label for="tipo">Tipo de la Pieza</label>
+        <input type="text" class="in form-control limit-40" id="tipo" name="tipo" aria-describedby="thelp"
+            placeholder="Ingrese el tipo de la pieza" required>
+        <small id="thelp" class="form-text text-muted">Nombre de la pieza.</small>
+    </div>
+    <div class="form-group">
+        <label for="costo">Costo de la Pieza</label>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Q.</div>
+            </div>
+            <input type="text" class="form-control limit-num" id="costo" name="costo"
+                placeholder="Ingrese el costo de la pieza, solo numeros" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="tipo">Cantidad de Piezas</label>
+        <div class="input-group mb-2">
+            <input type="text" class="in form-control limit-num" id="cantidad" name="cantidad"
+                placeholder="Ingrese la cantidad de existencias de la pieza, solo numeros" required>
+            <div class="input-group-prepend">
+                <div class="input-group-text">Unidades</div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear Pieza</button>
+</form>

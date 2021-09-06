@@ -13,13 +13,23 @@ import java.sql.PreparedStatement;
 public class Connect extends HttpServlet {
 
     private static Connection conn = null;
+    private static PreparedStatement stmt = null;
     private static final String URL = "jdbc:mysql://localhost:3306/Muebleria";
-    private static final String USER = "root";
-    private static final String PASS = "N47ur41B1u35#";
+    private static final String USER = "contrase_segura";
+    private static final String PASS = "usuario_no_seguro";
 
     public static boolean closeSession() {
         boolean success = false;
         
+        if (stmt != null) {
+            try {
+                stmt.close();
+                stmt = null;
+                success = true;
+            } catch (SQLException ex) {
+                success = false;
+            }
+        }
         if (conn != null) {
             try {
                 conn.close();
@@ -48,7 +58,8 @@ public class Connect extends HttpServlet {
     }
 
     public static PreparedStatement getPrepareStatement(String query) throws SQLException {
-        return Connect.conn.prepareStatement(query);
+        Connect.stmt = Connect.conn.prepareStatement(query);
+        return Connect.stmt;
     }
 
     protected static String getOpciones(String query) {

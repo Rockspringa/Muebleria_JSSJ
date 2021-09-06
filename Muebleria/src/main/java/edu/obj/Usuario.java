@@ -18,7 +18,7 @@ public class Usuario {
 
     public static Usuario construct(String user, String pass, int nivel) throws PatternSyntaxException {
         Usuario out = null;
-        Pattern pat = Pattern.compile("^\\w+$");
+        Pattern pat = Pattern.compile("^([\\w ])+$");
         Matcher matchUser = pat.matcher(user);
         Matcher matchPass = pat.matcher(pass);
 
@@ -47,5 +47,10 @@ public class Usuario {
 
     public void cancelar() {
         if (!this.cancelado) this.cancelado = !this.cancelado;
+    }
+    
+    @Override
+    public String toString() {
+        return this.username;
     }
 }

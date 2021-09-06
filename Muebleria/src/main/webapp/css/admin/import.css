@@ -1,0 +1,50 @@
+#box {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    height: 80% !important;
+    margin-bottom: 2em;
+}
+
+#text-area {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    grid-column-end: span 2;
+}
+
+li {
+    min-width: 100%;
+    width: max-content;
+}
+
+.alert {
+    width: 90%;
+    height: fit-content;
+    margin: 0 auto !important;
+}
+
+aside {
+    margin: 5% 0;
+    padding: 38% 0;
+    border-right: solid 1px #004085;
+}
+
+form * {
+    text-align: center;
+    width: 85%;
+    display: block;
+    margin: 0 7.5%;
+}
+
+#filename {
+    width: 85%;
+    margin: 0 7.5%;
+    height: 6em;
+}
+
+form #file {
+    display: none !important;
+}

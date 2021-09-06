@@ -1,10 +1,10 @@
 USE MUEBLERIA;
 
-DELIMITER //
+DELIMITER /
 
 CREATE PROCEDURE ENSAMBLAR (IN mueble VARCHAR(40), IN usuario VARCHAR(40), IN fecha DATE)
 BEGIN
-	DECLARE output VARCHAR(17) DEFAULT 'success';
+	DECLARE output VARCHAR(25) DEFAULT 'success';
 	IF (EXISTS(SELECT nombre FROM MUEBLE WHERE nombre = mueble))
     THEN
 		IF (EXISTS(SELECT nombre_usuario FROM USUARIO WHERE usuario = nombre_usuario))
@@ -25,36 +25,34 @@ BEGIN
 				INSERT INTO ENSAMBLADO (fecha_ensamble, ensamblador, tipo, coste)
 					SELECT fecha, usuario, mueble, SUM(necesitados * costo) FROM TEMP;
 			DROP TABLE TEMP;
-			ELSE SET output = 'faltan piezas';
+			ELSE SET output = 'No hay piezas suficientes';
 			END IF;
-		ELSE SET output = 'falta el usuario';
+		ELSE SET output = 'No existe el usuario';
         END IF;
-	ELSE SET output = 'falta el mueble';
+	ELSE SET output = 'El mueble no existe';
 	END IF;
     SELECT output;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE ENSAMBLAR_NOW (IN mueble VARCHAR(40), IN usuario VARCHAR(40))
 BEGIN
 	CALL ENSAMBLAR(mueble, usuario, CURDATE());
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE IS_USUARIO (IN usuario VARCHAR(40), IN contra VARCHAR(40))
 BEGIN
 	IF (EXISTS(SELECT usuario, contraseña FROM USUARIO WHERE nombre_usuario LIKE usuario AND contraseña LIKE BINARY contra))
 	THEN
-		SELECT tipo INTO @t FROM USUARIO WHERE nombre_usuario LIKE BINARY usuario;
-		SELECT CONCAT("  ", @t);
+		SELECT tipo INTO @t FROM USUARIO WHERE nombre_usuario LIKE usuario;
+		SELECT activo INTO @a FROM USUARIO WHERE nombre_usuario LIKE usuario;
+		SELECT CONCAT("  ", @t, IF(@a = 1, "true", "false"));
 	ELSE
 		SELECT "0";
 	END IF;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE ADD_INDICACION (IN n_mueble VARCHAR(40), IN pieza VARCHAR(40), IN cant INT)
 BEGIN
@@ -87,14 +85,30 @@ BEGIN
                     
 				DROP TABLE TEMP;
 			END IF;
-		ELSE SET output = 'falta la pieza';
+		ELSE SET output = 'No existe la pieza';
         END IF;
-	ELSE SET output = 'falta el mueble';
+	ELSE SET output = 'No existe el mueble';
 	END IF;
     SELECT output;
 END;
+/
 
-DELIMITER //
+CREATE PROCEDURE ADD_INDICACION_2 (IN n_mueble VARCHAR(40), IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN cant INT)
+BEGIN
+	DECLARE output VARCHAR(17) DEFAULT 'success';
+	IF (EXISTS(SELECT nombre FROM MUEBLE WHERE nombre = n_mueble))
+    THEN
+		IF (EXISTS(SELECT tipo FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p))
+        THEN
+			INSERT INTO INDICACIONES (mueble, tipo_pieza, costo_pieza, cantidad)
+				VALUES (n_mueble, pieza, costo_p, cant);
+		ELSE SET output = 'No existe la pieza';
+        END IF;
+	ELSE SET output = 'No existe el mueble';
+	END IF;
+    SELECT output;
+END;
+/
 
 CREATE PROCEDURE EXISTS_INDICACION (IN n_mueble VARCHAR(40), IN pieza VARCHAR(40), IN cant INT)
 BEGIN
@@ -113,8 +127,7 @@ BEGIN
 	END IF;
     SELECT @output;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE GET_PIEZAS_IND (IN n_mueble VARCHAR(40))
 BEGIN
@@ -128,8 +141,7 @@ BEGIN
 	ELSE SELECT "falta el mueble";
 	END IF;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE GET_PIEZAS_IND_TABLA (IN n_mueble VARCHAR(40))
 BEGIN
@@ -141,8 +153,7 @@ BEGIN
 	ELSE SELECT "falta el mueble";
 	END IF;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE GET_PRECIOS_MUEBLE (IN n_mueble VARCHAR(40))
 BEGIN
@@ -154,8 +165,7 @@ BEGIN
 	ELSE SELECT "falta el mueble";
 	END IF;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE GET_PIEZAS ()
 BEGIN
@@ -164,17 +174,15 @@ BEGIN
 			tipo, costo, cantidad, IF(cantidad = 0, "Agotado", IF(cantidad < 13, "Agotandose", "Suficiente"))
 		FROM MATERIA_PRIMA ORDER BY costo;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE GET_CREADOS ()
 BEGIN
 	SET @num = 0;
 	SELECT @num := @num + 1 AS ' ', tipo, ensamblador, fecha_ensamble, coste, precio
-		FROM MATERIA_PRIMA INNER JOIN MUEBLE ON tipo = nombre ORDER BY fecha_ensamble;
+		FROM ENSAMBLADO INNER JOIN MUEBLE ON tipo = nombre ORDER BY fecha_ensamble;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE GET_PIEZAS_AGOTADAS ()
 BEGIN
@@ -182,8 +190,7 @@ BEGIN
 	SELECT @num := @num + 1 AS ' ', tipo, costo, cantidad FROM MATERIA_PRIMA
 		WHERE cantidad < 10 ORDER BY cantidad;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE GET_MUEBLES ()
 BEGIN
@@ -192,10 +199,9 @@ BEGIN
 		INNER JOIN MATERIA_PRIMA mp ON tipo_pieza = tipo AND costo_pieza = costo
 			ORDER BY CAST(mp.cantidad AS SIGNED) - CAST(i.cantidad AS SIGNED) DESC;
 END;
+/
 
-DELIMITER //
-
-CREATE PROCEDURE ADD_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN cantidad_p INT)
+CREATE PROCEDURE ADD_PIEZAS (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN cantidad_p INT)
 BEGIN
 	IF (EXISTS(SELECT tipo FROM MATERIA_PRIMA WHERE tipo = pieza))
     THEN
@@ -211,8 +217,7 @@ BEGIN
 		SELECT 'No se encontro un tipo coincidente.';
 	END IF;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE CREAR_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN cantidad_p INT)
 BEGIN
@@ -225,8 +230,7 @@ BEGIN
 			FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p;
 	END IF;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE UPDATE_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2), IN pieza_n VARCHAR(40), IN costo_n DECIMAL(5, 2), IN cantidad_n INT)
 BEGIN
@@ -251,8 +255,7 @@ BEGIN
 			costo_n, ' y con existencias igual a ', cantidad_n);
 	END IF;
 END;
-
-DELIMITER //
+/
 
 CREATE PROCEDURE DEL_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2))
 BEGIN
@@ -265,24 +268,186 @@ BEGIN
 		SELECT 'No existe ninguna coincidencia con la pieza y el costo.';
 	END IF;
 END;
+/
 
-DELIMITER //
-
-CREATE PROCEDURE ADD_PIEZA_UNO (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2))
+CREATE PROCEDURE ADD_PIEZA (IN pieza VARCHAR(40), IN costo_p DECIMAL(5, 2))
 BEGIN
 	IF (EXISTS(SELECT tipo, costo FROM MATERIA_PRIMA WHERE tipo = pieza AND costo = costo_p))
     THEN
-		CALL ADD_PIEZA (pieza, costo_p, 1);
+		CALL ADD_PIEZAS (pieza, costo_p, 1);
 	ELSE
 		CALL CREAR_PIEZA (pieza, costo_p, 1);
 	END IF;
 END;
+/
 
--- INSERT INTO MUEBLE VALUES ("Mesa Rustica", 150.00)
--- ICALL ADD_PIEZA ("Pata Cuadrada", 15.50, 4);
--- ICALL ADD_PIEZA ("Pata Cuadrada", 15.50, -1);
--- ICALL ADD_INDICACION ("Mesa Rustica", "Pata Cuadrada", 2)
--- ICALL GET_MUEBLES ()
--- ISELECT * FROM MUEBLE;
--- ISELECT * FROM MATERIA_PRIMA;
--- ISELECT * FROM INDICACIONES;
+CREATE PROCEDURE REPORTE_VENTAS (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT f.num_factura, c.nombre, e.tipo, fo.precio, f.fecha_compra FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN CLIENTE c ON cliente = nit
+				INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final;
+END;
+/
+
+CREATE PROCEDURE REPORTE_DEVOLUCIONES (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT f.num_factura, c.nombre, e.tipo, fo.precio, f.fecha_compra, fo.fecha_devolucion, e.coste DIV 3 FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN CLIENTE c ON cliente = nit
+				INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 1 AND fecha_devolucion BETWEEN inicio AND final;
+END;
+/
+
+CREATE PROCEDURE REPORTE_GANANCIAS_TOTALES (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT fo.precio - e.coste FROM FACTURADO fo
+		INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final;
+END;
+/
+
+CREATE PROCEDURE REPORTE_GANANCIAS (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT e.tipo, e.coste, fo.precio, fo.precio - e.coste FROM FACTURADO fo
+		INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final;
+END;
+/
+
+CREATE PROCEDURE REPORTE_USUARIO_VENTAS (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT f.vendedor, COUNT(*) AS 'Cantidad Ventas' FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+        GROUP BY vendedor ORDER BY 'Cantidad Ventas' DESC LIMIT 1;
+END;
+/
+
+CREATE PROCEDURE REPORTE_USUARIO_VENTAS_TABLA (IN inicio DATE, IN final DATE)
+BEGIN
+	CREATE TEMPORARY TABLE TEMP AS
+		SELECT f.vendedor AS usuario, COUNT(*) AS 'Cantidad Ventas' FROM FACTURADO fo
+			INNER JOIN FACTURA f ON factura = num_factura
+				INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+			WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+			GROUP BY vendedor ORDER BY 'Cantidad Ventas' DESC LIMIT 1;
+            
+	SELECT usuario INTO @usuario FROM TEMP;
+                    
+	SELECT e.tipo, fo.precio FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND vendedor = @usuario AND fecha_compra BETWEEN inicio AND final;
+        
+	DROP TABLE TEMP;
+END;
+/
+
+CREATE PROCEDURE REPORTE_USUARIO_GANANCIAS (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT f.vendedor, SUM(fo.precio - e.coste) AS Ganancias FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+        GROUP BY vendedor ORDER BY Ganancias DESC LIMIT 1;
+END;
+/
+
+CREATE PROCEDURE REPORTE_USUARIO_GANANCIAS_TABLA (IN inicio DATE, IN final DATE)
+BEGIN
+	CREATE TEMPORARY TABLE TEMP AS
+		SELECT f.vendedor AS usuario, SUM(fo.precio - e.coste) AS Ganancias FROM FACTURADO fo
+			INNER JOIN FACTURA f ON factura = num_factura
+				INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+			WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+			GROUP BY vendedor ORDER BY Ganancias DESC LIMIT 1;
+            
+	SELECT usuario INTO @usuario FROM TEMP;
+                    
+	SELECT e.tipo, fo.precio, e.coste, fo.precio - e.coste FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND vendedor = @usuario AND fecha_compra BETWEEN inicio AND final;
+        
+	DROP TABLE TEMP;
+END;
+/
+
+CREATE PROCEDURE REPORTE_MUEBLE_MAS (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT e.tipo, COUNT(*) AS Vendidos FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+        GROUP BY tipo ORDER BY Vendidos DESC LIMIT 1;
+END;
+/
+
+CREATE PROCEDURE REPORTE_MUEBLE_MAS_TABLA (IN inicio DATE, IN final DATE)
+BEGIN
+	CREATE TEMPORARY TABLE TEMP AS
+		SELECT e.tipo, COUNT(*) AS Vendidos FROM FACTURADO fo
+			INNER JOIN FACTURA f ON factura = num_factura
+				INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+			WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+			GROUP BY tipo ORDER BY Vendidos DESC LIMIT 1;
+            
+	SELECT tipo INTO @mueble FROM TEMP;
+                    
+	SELECT fo.precio, e.coste, f.fecha_compra FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND tipo = @mueble AND fecha_compra BETWEEN inicio AND final;
+        
+	DROP TABLE TEMP;
+END;
+/
+
+CREATE PROCEDURE REPORTE_MUEBLE_MENOS (IN inicio DATE, IN final DATE)
+BEGIN
+	SELECT e.tipo, COUNT(*) AS Vendidos FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+        GROUP BY tipo ORDER BY Vendidos LIMIT 1;
+END;
+/
+
+CREATE PROCEDURE REPORTE_MUEBLE_MENOS_TABLA (IN inicio DATE, IN final DATE)
+BEGIN
+	CREATE TEMPORARY TABLE TEMP AS
+		SELECT e.tipo, COUNT(*) AS Vendidos FROM FACTURADO fo
+			INNER JOIN FACTURA f ON factura = num_factura
+				INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+			WHERE devuelto = 0 AND fecha_compra BETWEEN inicio AND final
+			GROUP BY tipo ORDER BY Vendidos LIMIT 1;
+            
+	SELECT tipo INTO @mueble FROM TEMP;
+                    
+	SELECT fo.precio, e.coste, f.fecha_compra FROM FACTURADO fo
+		INNER JOIN FACTURA f ON factura = num_factura
+			INNER JOIN ENSAMBLADO e ON mueble = mueble_id
+		WHERE devuelto = 0 AND tipo = @mueble AND fecha_compra BETWEEN inicio AND final;
+        
+	DROP TABLE TEMP;
+END;
+/
+
+CREATE PROCEDURE GET_TIPOS_MUEBLE ()
+BEGIN
+	SELECT nombre FROM MUEBLE INNER JOIN ENSAMBLADO ON tipo = nombre
+		LEFT JOIN FACTURADO ON mueble = mueble_id
+        WHERE mueble IS NULL GROUP BY nombre;
+END;
+
+-- INSERT INTO MUEBLE VALUES ("Mesa Rustica", 150.00);
+-- CALL CREAR_PIEZA ("Pata Cuadrada", 15.50, 4);
+-- CALL ADD_INDICACION ("Mesa Rustica", "Pata Cuadrada", 2)
+-- CALL GET_MUEBLES ()
+-- SELECT * FROM MUEBLE;
+-- SELECT * FROM MATERIA_PRIMA;
+-- SELECT * FROM INDICACIONES;

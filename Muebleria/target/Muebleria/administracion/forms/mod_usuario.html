@@ -1,0 +1,36 @@
+<h1 class="bg-primary text-white">Modificar un Usuario</h1>
+<div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Info: </strong>Seleccione el usuario para poder ver los datos anteriores.
+</div>
+<form method="POST" class="mod">
+    <div class="form-group">
+        <label for="user">Nombre de Usuario</label>
+        <select class="form-control" id="user" name="user" required>
+            <option disabled selected>Nombre de usuario</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="pass">Nueva Contraseña</label>
+        <input type="password" class="in form-control limit-40" id="pass" name="pass"
+            placeholder="••••••••••">
+    </div>
+    <div class="form-group">
+        <label for="tipo">Area en la cual Trabaja Actualmente</label>
+        <input type="text" class="form-control form-control-plaintext" id="tipo_v" value="Esperando datos..." readonly>
+    </div>
+    <div class="form-group">
+        <label for="tipo">Area en la cual Trabajara Ahora</label>
+        <select class="form-control" id="tipo" name="tipo">
+            <option disabled selected>Elegir area</option>
+            <option>1. Area de fabricacion</option>
+            <option>2. Area de ventas</option>
+            <option>3. Area de administracion</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="tipo">Estado Actual del Usuario</label>
+        <input type="text" class="form-control form-control-plaintext" id="estado" value="Esperando datos..." readonly>
+    </div>
+    <button type="submit" class="btn btn-primary">Modificar Usuario</button>
+</form>

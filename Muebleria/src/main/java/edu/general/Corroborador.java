@@ -44,4 +44,12 @@ public class Corroborador {
         LocalDate date = fecha.toLocalDate();
         return date.format(formatter);
     }
+
+    public static Date getDate(String fecha) {
+        return Date.valueOf(LocalDate.parse(fecha, formatter));
+    }
+
+    public static LocalDate getLocalDate(String fecha) {
+        return LocalDate.parse(fecha, formatter);
+    }
 }

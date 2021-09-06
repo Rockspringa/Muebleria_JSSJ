@@ -26,6 +26,10 @@ body {
     border-bottom: solid 4px #142341;
 }
 
+.menu-item:hover {
+    background-color: burlywood;
+}
+
 .selected {
     background-color: burlywood;
 }
@@ -36,6 +40,10 @@ body {
     grid-column-end: span 4;
     color: azure;
     margin: 10px 0 20px;
+}
+
+.home:hover {
+    color: lightskyblue;
 }
 
 header a, header a:hover {

@@ -20,6 +20,16 @@ import javax.servlet.http.HttpSession;
 public class UserArea extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (!req.getParameter("salir").equals("0")) {
+            HttpSession session = req.getSession();
+            session.removeAttribute("user");
+            session.invalidate();
+            resp.sendRedirect("/");
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -31,17 +41,29 @@ public class UserArea extends HttpServlet {
         if (Connect.createSession()) {
             try {
                 toReturn = getUserVerification(user, pass);
-                if (toReturn.length() > 1) {
-                    Usuario usuario = Usuario.construct(user, pass, Integer.parseInt(toReturn.substring(2)));
+                if (toReturn.contains("false")) {
+                    toReturn = "El usuario ingresado ya ha sido cancelado.";
+                } else if (toReturn.length() > 1) {
+                    Usuario usuario = Usuario.construct(user, pass, Integer.parseInt(toReturn.substring(2, 3)));
                     HttpSession session = request.getSession();
 
                     session.setAttribute("user", usuario);
                     
-                    toReturn = switch (usuario.getNivel()) {
-                        case 1 -> Index.FABRICA.getUrl();
-                        case 2 -> Index.VENTAS.getUrl();
-                        case 3 -> Index.ADMIN.getUrl();
-                        default -> Index.LOGIN.getUrl();
+                    switch (usuario.getNivel()) {
+                        case 1:
+                            toReturn = Index.FABRICA.getUrl();
+                            break;
+
+                        case 2:
+                            toReturn = Index.VENTAS.getUrl();
+                            break;
+
+                        case 3:
+                            toReturn = Index.ADMIN.getUrl();
+                            break;
+
+                        default:
+                            toReturn = Index.LOGIN.getUrl();
                     };
                 } else {
                     toReturn = "El nombre de usuario o la contraseña es incorrecto";

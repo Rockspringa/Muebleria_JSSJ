@@ -1,0 +1,89 @@
+#box {
+    min-width: 90%;
+    min-height: 32em;
+    height: fit-content !important;
+    margin-bottom: 3em !important;
+    overflow: hidden !important;
+}
+
+form {
+    margin: 1.5em 2.5em;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em 3.5em;
+}
+
+.form-group {
+    margin: 0;
+}
+
+.form-control-plaintext {
+    padding: .375rem .75rem !important;
+}
+
+h1, .cont {
+    margin: 0;
+    padding: 0.5em 1.5em;
+}
+
+form > hr {
+    grid-column-end: span 2;
+    margin: 0;
+}
+
+form > .btn {
+    grid-column-end: span 2;
+}
+
+.btn {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.cont {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.mueble, .fraction {
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    width: 50%;
+}
+
+.id, .precio {
+    text-align: center;
+    margin: auto;
+    width: auto;
+}
+
+#box a {
+    display: none;
+    width: 100%;
+}
+
+.flexion {
+    width: 100% !important;
+}
+
+#totales, .flexion {
+    display: flex;
+    width: 100%;
+    margin: 0;
+}
+
+#carrito div {
+    width: 100%;
+}
+
+#totales div, #carrito > div {
+    display: flex;
+    width: fit-content;
+    margin: auto;
+}
+
+#totales * {
+    font-size: 1.25rem;
+}

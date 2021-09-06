@@ -15,6 +15,7 @@ function isNumsOnly(txt) {
     return NUMS.test(txt);
 }
 
+let homeTitle = null;
 let normalColor = null;
 
 $(document).ready(() => {
@@ -28,6 +29,13 @@ $(document).ready(() => {
     $('form, #box').on('blur', '.limit-40', function() {
         if ($(this).val().length > 40) {
             alert('Ingrese un dato que tenga menos de 40 caracteres.');
+            $(this).val('');
+        };
+    });
+
+    $('form, #box').on('blur', '.limit-7', function() {
+        if ($(this).val().length > 7 || $(this).val().length < 7) {
+            alert('Ingrese un dato que tenga exactamente 7 caracteres.');
             $(this).val('');
         };
     });
@@ -47,4 +55,12 @@ $(document).ready(() => {
         if (normalColor == null) normalColor = $(this).css('background-color');
         $(this).css('background-color', normalColor);
     });
+
+    $('.home').hover(
+        () => {
+            homeTitle = $('.home').text();
+            $('.home').text('Cerrar Sesion')
+        },
+        () => $('.home').text(homeTitle)
+    );
 });

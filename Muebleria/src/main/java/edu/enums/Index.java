@@ -3,8 +3,8 @@ package edu.enums;
 public enum Index {
     LOGIN("/"),
     FABRICA("/fabrica/construir.jsp"),
-    VENTAS("/ventas/..."),
-    ADMIN("/administracion/...");
+    VENTAS("/ventas/escoger.jsp"),
+    ADMIN("/administracion/import.jsp");
     
     private final String url;
     

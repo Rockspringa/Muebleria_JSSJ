@@ -1,0 +1,49 @@
+#box {
+    min-width: 90%;
+    min-height: 32em;
+    height: fit-content !important;
+    margin-bottom: 3em !important;
+    height: fit-content !important;
+}
+
+form {
+    margin: 1.5em 2.5em;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em 3.5em;
+}
+
+.form-group {
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
+    padding: 0.5em 1.5em;
+}
+
+.dates {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}
+
+form .form-group {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#cont {
+    text-align: center;
+}
+
+#submit {
+    height: fit-content;
+    padding: 5px 20px;
+    margin: auto;
+}
+
+#virus-download {
+    display: none;
+    margin: 1.5em auto;
+}

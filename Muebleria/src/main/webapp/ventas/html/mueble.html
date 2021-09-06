@@ -1,0 +1,26 @@
+<form method="POST">
+    <div class="form-group">
+        <label for="tipo">Escoja el Tipo del Mueble</label>
+        <select class="form-control" id="tipo" name="tipo" required>
+            <option disabled selected>Tipo de Mueble</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="precio">Precio del Tipo de Mueble</label>
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Q.</div>
+            </div>
+            <input type="text" class="form-control form-control-plaintext" id="precio" name="precio"
+                value="Esperando datos..." readonly>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="pass">Escoja el Mueble</label>
+        <select class="form-control" id="id" name="id" required>
+            <option disabled selected>Identificador de Mueble</option>
+        </select>
+    </div>
+    <button id="submit" type="submit" class="btn btn-primary">Escojer Mueble y Continuar</button>
+    <button id="caja" type="button" class="btn btn-secondary">Escojer Mueble e Ir a Caja</button>
+</form>

@@ -42,6 +42,28 @@ public class TagFactory {
         return sb.toString();
     }
 
+    public static String getTableWithCaption(String caption, String[] titles, String rows) {
+        StringBuilder sb = new StringBuilder("<table class=\"table\">");
+        sb.append("<caption class=\"bg-light text-dark\">" + caption + "</caption>");
+        sb.append("<thead class=\"thead-light\"><tr>");
+
+        for (String th : titles) {
+            sb.append("<th>");
+            sb.append(th);
+            sb.append("</th>");
+        }
+
+        sb.append("</tr></thead>");
+        sb.append("<tbody>");
+
+        sb.append(rows);
+
+        sb.append("</tbody>");
+        sb.append("</table>");
+
+        return sb.toString();
+    }
+
     public static String getSquaredP(String title, String color) {
         StringBuilder sb = new StringBuilder("<button type=\"button\" class=\"btn " + color + "\">");
         String imageSrc = (color.contains("danger"))
@@ -82,5 +104,13 @@ public class TagFactory {
 
     public static String getOptions(String opt) {
         return "<option class=\"del\">" + opt + "</option>";
+    }
+
+    public static String getLine(String line) {
+        return "<li class=\"list-group-item list-group-item-success\">" + line + "</li>";
+    }
+
+    public static String getErrorLine(String line) {
+        return "<li class=\"list-group-item list-group-item-danger\">" + line + "</li>";
     }
 }
